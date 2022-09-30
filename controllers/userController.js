@@ -22,11 +22,19 @@ const sendMessage =async (req, res, next) => {
          body: 'Hello its test!',
          to: 'whatsapp:+918606804105'
        })
-      .then(message => res.status(200).json({
+      .then(message => {
+        res.status(200).json({
         success:true, 
         message: message,
         result:[]
-      }));
+      })}).catch(err=>{
+        console.log(err)
+        res.status(500).json({
+          success:false, 
+          message: err,
+          result:[]
+      }); 
+    })
   }
   catch (err) {
     const errorMessage = err.message;

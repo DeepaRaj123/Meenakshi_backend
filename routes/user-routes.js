@@ -5,7 +5,7 @@ const AuthMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.get('/sendMessage', sendMessage);
+router.post('/sendMessage', sendMessage);
 router.post('/postMessage', postMessage);
 router.get('/', showwelcomeMessage);
 
