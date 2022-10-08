@@ -9,62 +9,76 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://meenakshi-control-system-6ad84-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
 
 const sendMessage =async (req, res, next) => {
 
-  try{
-    client.messages
-      .create({
-         from: 'whatsapp:+14155238886',
-         body: 'Hello its test!',
-         to: 'whatsapp:+918606804105'
-       })
-      .then(message => {
-        res.status(200).json({
-        success:true, 
-        message: message,
-        result:[]
-      })}).catch(err=>{
-        console.log(err)
-        res.status(500).json({
-          success:false, 
-          message: err,
-          result:[]
-      }); 
-    })
-  }
-  catch (err) {
-    const errorMessage = err.message;
-    res.status(500).json({
-        success:false, 
-        message: errorMessage,
-        result:[]
-    }); 
-  }
- 
+    // client.messages
+    //   .create({
+    //      from: 'whatsapp:+13393298706',
+    //      body: 'Hello its test!',
+    //      to: 'whatsapp:+918606804105'
+    //    })
+    //   .then(message => {
+    //     res.status(200).json({
+    //     success:true, 
+    //     message: message,
+    //     result:[]
+    //   })}).catch(err=>{
+    //     console.log(err)
+    //     res.status(500).json({
+    //       success:false, 
+    //       message: err,
+    //       result:[]
+    //   }); 
+    // })
+     
+    // client.messages 
+    //       .create({ 
+    //          body: 'hello',  
+    //          messagingServiceSid: 'MG7875778953c74038a3faf9b7e65f9389',      
+    //          to: '+917907316810' 
+    //        }) .then(message => {
+    //     res.status(200).json({
+    //     success:true, 
+    //     message: message,
+    //     result:[]
+    //   })}).catch(err=>{
+    //     console.log(err)
+    //     res.status(500).json({
+    //       success:false, 
+    //       message: err,
+    //       result:[]
+    //   }); 
+    // });
 }
 
 const postMessage =async (req, res, next) => {
 
-  try{
+    const client = require('twilio')(req.body.TWILIO_ACCOUNT_SID, req.body.TWILIO_AUTH_TOKEN);
 
-    if(req.body.from&&req.body.to&&req.body.message){
-  
+    if(req.body.messagingServiceSid&&req.body.to&&req.body.message&&req.body.TWILIO_ACCOUNT_SID&&req.body.TWILIO_AUTH_TOKEN){
+      client.messages 
+          .create({ 
+             body: req.body.message,  
+             messagingServiceSid: req.body.messagingServiceSid,      
+             to: req.body.to,
+             TWILIO_ACCOUNT_SID: req.body.TWILIO_ACCOUNT_SID,
+             TWILIO_AUTH_TOKEN: req.body.TWILIO_AUTH_TOKEN
+      }).then(message => {
+            res.status(200).json({
+            success:true, 
+            message: message,
+            result:[]
+          })})      .done()
 
-    client.messages
-      .create({
-         from: 'whatsapp:'+req.body.from,
-         body: req.body.message,
-         to: 'whatsapp:'+req.body.to
-       })
-      .then(message => res.status(200).json({
-        success:true, 
-        message: message,
-        result:[]
-      }));
+        //   .catch(err=>{
+        //     console.log(err)
+        //     res.status(500).json({
+        //       success:false, 
+        //       message: err,
+        //       result:[]
+        //   }); 
+        // });
     }
     else{
       res.status(500).json({
@@ -73,15 +87,6 @@ const postMessage =async (req, res, next) => {
           result:[]
       }); 
     }
-  }
-  catch (err) {
-    const errorMessage = err.message;
-    res.status(500).json({
-        success:false, 
-        message: errorMessage,
-        result:[]
-    }); 
-  }
  
 }
 
