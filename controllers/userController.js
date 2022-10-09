@@ -69,7 +69,7 @@ const postMessage =async (req, res, next) => {
             success:true, 
             message: message,
             result:[]
-          })})      .done()
+          })})
 
           .catch(err=>{
             console.log(err)
